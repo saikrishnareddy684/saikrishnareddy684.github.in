@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Server MCQ Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    .options label {
+      display: block;
+      margin: 8px 0;
+    }
+    .timer {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #d9534f;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      background: #e9ffe9;
+      padding: 15px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="quiz"></div>
+    <button id="nextBtn" onclick="saveAndNext()">Save & Next</button>
+    <button id="submitBtn" onclick="submitQuiz()">Submit Exam</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Shuffle function
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    // Questions list
+    const questions = [
+      {
+        q: "What is SSAS?",
+        options: shuffle([
+          { text: "A Microsoft tool used for OLAP and data mining.", correct: true },
+          { text: "A web server management tool.", correct: false },
+          { text: "A database backup utility.", correct: false },
+          { text: "A network security software.", correct: false }
+        ]),
+        time: 30
+      },
+      {
+        q: "Cube in SSAS means?",
+        options: shuffle([
+          { text: "Precalculation allowing queries to return data quickly with dimensions and measures.", correct: true },
+          { text: "An encryption method for SQL Server data.", correct: false },
+          { text: "A backup file format in Analysis Services.", correct: false },
+          { text: "A graphical interface for designing SQL queries.", correct: false }
+        ]),
+        time: 30
+      },
+      {
+        q: "How many modes does SSAS have?",
+        options: shuffle([
+          { text: "2 modes: Multidimensional and Tabular", correct: true },
+          { text: "3 modes: Graph, Relational, Tabular", correct: false },
+          { text: "1 mode: Multidimensional only", correct: false },
+          { text: "4 modes: Star, Snowflake, Tabular, Relational", correct: false }
+        ]),
+        time: 20
+      },
+      {
+        q: "What is the error fix for 'A connection cannot be made to redirector. Ensure that SQL Browser service is running.'?",
+        options: shuffle([
+          { text: "Ensure SQL Server Analysis Services and SQL Browser service are running.", correct: true },
+          { text: "Reinstall SQL Server completely.", correct: false },
+          { text: "Delete temp database files.", correct: false },
+          { text: "Reset Windows credentials.", correct: false }
+        ]),
+        time: 20
+      }
+    ];
+
+    let current = 0;
+    let userAnswers = [];
+    let timer;
+    let secondsLeft;
+
+    function loadQuestion(index) {
+      clearInterval(timer);
+      const q = questions[index];
+      secondsLeft = q.time;
+
+      document.getElementById("quiz").innerHTML = `
+        <div class="timer">Time Left: <span id="timer">${secondsLeft}</span>s</div>
+        <div class="question">Q${index + 1}. ${q.q}</div>
+        <div class="options">
+          ${q.options.map((opt, i) => `
+            <label><input type="radio" name="option" value="${i}"> ${opt.text}</label>
+          `).join('')}
+        </div>
+      `;
+
+      // Manage button visibility
+      document.getElementById("nextBtn").style.display = (index < questions.length - 1) ? "inline-block" : "none";
+      document.getElementById("submitBtn").style.display = (index === questions.length - 1) ? "inline-block" : "none";
+
+      timer = setInterval(() => {
+        secondsLeft--;
+        document.getElementById("timer").textContent = secondsLeft;
+        if (secondsLeft <= 0) {
+          saveAnswerAndMove();
+        }
+      }, 1000);
+    }
+
+    function saveAndNext() {
+      saveAnswerAndMove();
+    }
+
+    function saveAnswerAndMove() {
+      clearInterval(timer);
+      const selected = document.querySelector("input[name='option']:checked");
+      if (selected) {
+        userAnswers[current] = parseInt(selected.value);
+      } else {
+        userAnswers[current] = null;
+      }
+
+      if (current < questions.length - 1) {
+        current++;
+        loadQuestion(current);
+      } else {
+        submitQuiz();
+      }
+    }
+
+    function submitQuiz() {
+      clearInterval(timer);
+      if (userAnswers.length < questions.length) {
+        const selected = document.querySelector("input[name='option']:checked");
+        if (selected) {
+          userAnswers[current] = parseInt(selected.value);
+        } else {
+          userAnswers[current] = null;
+        }
+      }
+      showResult();
+    }
+
+    function showResult() {
+      let score = 0;
+      let resultHTML = "<h3>Your Results:</h3><ul>";
+
+      questions.forEach((q, i) => {
+        const correctIndex = q.options.findIndex(opt => opt.correct);
+        const userSelected = userAnswers[i];
+        const correctText = q.options[correctIndex]?.text || "(No Answer)";
+        const userText = userSelected !== null ? q.options[userSelected]?.text : "(No Answer)";
+
+        if (userSelected === correctIndex) score++;
+
+        resultHTML += `<li><strong>Q${i + 1}:</strong> ${q.q}<br>
+          Your Answer: ${userText}<br>
+          Correct Answer: ${correctText}</li><br>`;
+      });
+
+      resultHTML += `</ul><h4>Score: ${score} / ${questions.length}</h4>`;
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("submitBtn").style.display = "none";
+      document.getElementById("result").innerHTML = resultHTML;
+    }
+
+    loadQuestion(current);
+  </script>
+</body>
+</html>
