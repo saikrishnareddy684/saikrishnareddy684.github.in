@@ -32,7 +32,7 @@
       margin-bottom: 10px;
       color: #d9534f;
     }
-    #submitBtn {
+    #nextBtn, #submitBtn {
       margin-top: 20px;
       padding: 10px 15px;
       background-color: #007bff;
@@ -40,6 +40,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-right: 10px;
     }
     #result {
       margin-top: 20px;
@@ -52,6 +53,7 @@
 <body>
   <div class="container">
     <div id="quiz"></div>
+    <button id="nextBtn" onclick="saveAndNext()">Save & Next</button>
     <button id="submitBtn" onclick="submitQuiz()">Submit Exam</button>
     <div id="result"></div>
   </div>
@@ -119,14 +121,23 @@
         secondsLeft--;
         document.getElementById("timer").textContent = secondsLeft;
         if (secondsLeft <= 0) {
-          userAnswers.push(null);
-          nextQuestion();
+          saveAnswerAndMove();
         }
       }, 1000);
     }
 
-    function nextQuestion() {
+    function saveAndNext() {
+      saveAnswerAndMove();
+    }
+
+    function saveAnswerAndMove() {
       clearInterval(timer);
+      const selected = document.querySelector("input[name='option']:checked");
+      if (selected) {
+        userAnswers.push(parseInt(selected.value));
+      } else {
+        userAnswers.push(null);
+      }
       if (current < questions.length - 1) {
         current++;
         loadQuestion(current);
@@ -137,9 +148,13 @@
 
     function submitQuiz() {
       clearInterval(timer);
-      const selected = document.querySelector("input[name='option']:checked");
-      if (selected && userAnswers.length < questions.length) {
-        userAnswers.push(parseInt(selected.value));
+      if (userAnswers.length < questions.length) {
+        const selected = document.querySelector("input[name='option']:checked");
+        if (selected) {
+          userAnswers.push(parseInt(selected.value));
+        } else {
+          userAnswers.push(null);
+        }
       }
       showResult();
     }
@@ -163,6 +178,7 @@
 
       resultHTML += `</ul><h4>Score: ${score} / ${questions.length}</h4>`;
       document.getElementById("quiz").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
       document.getElementById("submitBtn").style.display = "none";
       document.getElementById("result").innerHTML = resultHTML;
     }
