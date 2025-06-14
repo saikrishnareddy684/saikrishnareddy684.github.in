@@ -60,19 +60,469 @@
 
   <script>
     const questions = [
-      {
-        q: "Which SQL statement is used to extract data from a database?",
-        options: ["GET", "OPEN", "SELECT", "EXTRACT"],
-        answer: 2,
-        time: 20
-      },
-      {
-        q: "Which function is used to count the number of rows in SQL?",
-        options: ["COUNT()", "SUM()", "NUMBER()", "TOTAL()"],
-        answer: 0,
-        time: 20
-      }
-    ];
+  {
+    q: "What is Git primarily?",
+    options: [
+      "A document editing software",
+      "A distributed version control system",
+      "A project management tool",
+      "An operating system"
+    ],
+    answer: 1, // 'A distributed version control system'
+    time: 25
+  },
+  {
+    q: "Which Git concept is a snapshot of your project at a specific point in time?",
+    options: [
+      "Repository",
+      "Working Directory",
+      "Commit",
+      "Staging Area"
+    ],
+    answer: 2, // 'Commit'
+    time: 25
+  },
+  {
+    q: "Where is Git most commonly used for version control?",
+    options: [
+      "Data analysis in spreadsheets",
+      "Software development and collaborative projects",
+      "Graphic design and video editing",
+      "Operating system maintenance"
+    ],
+    answer: 1, // 'Software development and collaborative projects'
+    time: 25
+  },
+  {
+    q: "What is GitHub best for?",
+    options: [
+      "Personal portfolios and collaboration",
+      "End-to-end DevOps and CI/CD",
+      "Teams using Jira and Atlassian tools",
+      "Offline code development"
+    ],
+    answer: 0, // 'Open-source projects, personal portfolios, and easy collaboration.' shortened to 'Personal portfolios and collaboration'
+    time: 25
+  },
+  {
+    q: "Which platform has the strongest built-in CI/CD?",
+    options: [
+      "GitHub",
+      "Bitbucket",
+      "GitLab",
+      "Azure DevOps"
+    ],
+    answer: 2, // 'GitLab'
+    time: 20
+  },
+  {
+    q: "What is the technical term used in operating systems for a structure that holds files?",
+    options: [
+      "Folder",
+      "File",
+      "Directory",
+      "Container"
+    ],
+    answer: 2, // 'Directory'
+    time: 20
+  },
+  {
+    q: "What is the primary difference in Git commands when switching between platforms (like GitHub to GitLab)?",
+    options: [
+      "All Git commands change completely",
+      "Core Git commands remain the same, but remote connection steps vary",
+      "The Git command-line interface becomes unusable",
+      "Only the 'git add' command changes"
+    ],
+    answer: 1, // 'Most Git commands remain the same, but certain steps—such as connecting to a remote repository, setting up authentication, or creating pull/merge requests—can vary slightly depending on the platform you're using'
+    time: 30
+  },
+  {
+    q: "Which Git command initializes a new repository in a folder?",
+    options: [
+      "`git clone`",
+      "`git add`",
+      "`git init`",
+      "`git start`"
+    ],
+    answer: 2, // 'git init'
+    time: 20
+  },
+  {
+    q: "What does `git add` do?",
+    options: [
+      "Commits changes to the local history",
+      "Deletes files from the working directory",
+      "Stages changes for the next commit",
+      "Pulls changes from a remote repository"
+    ],
+    answer: 2, // 'Stages changes for the next commit.'
+    time: 20
+  },
+  {
+    q: "Which `git commit` option automatically stages modified and deleted files?",
+    options: [
+      "`-m`",
+      "`-a`",
+      "`--all`",
+      "`-d`"
+    ],
+    answer: 1, // '-a'
+    time: 25
+  },
+  {
+    q: "Which command is used to view the full commit history in Git?",
+    options: [
+      "`git status`",
+      "`git log`",
+      "`git history`",
+      "`git view`"
+    ],
+    answer: 1, // 'git log'
+    time: 20
+  },
+  {
+    q: "Where do most Git actions like staging and committing occur?",
+    options: [
+      "On remote servers like GitHub",
+      "In the cloud",
+      "On your own local computer",
+      "Directly in the web browser"
+    ],
+    answer: 2, // 'On your own computer.'
+    time: 25
+  },
+  {
+    q: "How do you unstage a specific file in Git (remove it from the staging area)?",
+    options: [
+      "`git reset --hard <file>`",
+      "`git remove <file>`",
+      "`git reset HEAD <file>`",
+      "`git unstage <file>`"
+    ],
+    answer: 2, // 'git reset HEAD <file>' (though `git restore --staged <file>` is more modern, the CSV used this)
+    time: 25
+  },
+  {
+    q: "Is the Git staging area a separate physical folder?",
+    options: [
+      "Yes, it's a hidden folder",
+      "No, it's an internal concept for tracking changes",
+      "Only for large projects",
+      "It depends on the operating system"
+    ],
+    answer: 1, // 'No, staging in Git is not a separate folder—it's a concept related to how Git tracks changes before committing them to the repository.'
+    time: 30
+  },
+  {
+    q: "What is the primary purpose of `git clone`?",
+    options: [
+      "To update an existing local repository",
+      "To send local commits to a remote repository",
+      "To download a full copy of a remote repository for the first time",
+      "To merge changes from one branch to another"
+    ],
+    answer: 2, // 'To download a full copy of a remote repository to your local machine for the first time.'
+    time: 25
+  },
+  {
+    q: "What is GitHub Desktop?",
+    options: [
+      "A command-line interface for Git",
+      "A web-based code editor",
+      "A graphical user interface (GUI) for Git/GitHub",
+      "A cloud storage service for Git repositories"
+    ],
+    answer: 2, // 'A free, open-source application that provides a graphical user interface (GUI) for interacting with GitHub and other Git hosting services.'
+    time: 25
+  },
+  {
+    q: "What does a Version Control System (VCS) track?",
+    options: [
+      "Only the final version of a project",
+      "Only who made changes to files",
+      "The history of changes as people and teams collaborate",
+      "Only file sizes and creation dates"
+    ],
+    answer: 2, // 'The history of changes as people and teams collaborate on projects together.'
+    time: 25
+  },
+  {
+    q: "What does a Git repository encompass?",
+    options: [
+      "Only the current version of project files",
+      "The entire collection of files, folders, and their revision history",
+      "Only the commit messages",
+      "Only the untracked files"
+    ],
+    answer: 1, // 'The entire collection of files and folders associated with a project, along with each file's revision history.'
+    time: 25
+  },
+  {
+    q: "What is GitHub's role in the development process?",
+    options: [
+      "It only hosts Git repositories and does not offer collaboration tools",
+      "It builds collaboration directly into the development process using features like pull requests and code review",
+      "It's primarily a code editor for Git projects",
+      "It's an alternative to Git, not a host for it"
+    ],
+    answer: 1, // 'GitHub hosts Git repositories and provides developers with tools to ship better code through command line features, issues (threaded discussions), pull requests, code review, or the use of a collection of free and for-purchase apps in the GitHub Marketplace.'
+    time: 30
+  },
+  {
+    q: "Which Git command is used to save staged changes to the project history?",
+    options: [
+      "`git add`",
+      "`git pull`",
+      "`git commit`",
+      "`git save`"
+    ],
+    answer: 2, // 'git commit'
+    time: 20
+  },
+  {
+    q: "Is `git clone` used to copy a repository from local to GitHub?",
+    options: [
+      "Yes, always",
+      "No, it copies from remote (GitHub) to local",
+      "Only if the local repository is empty",
+      "It's used for merging branches"
+    ],
+    answer: 1, // 'No, git clone copies a repository from GitHub (or another remote) to your local machine.'
+    time: 25
+  },
+  {
+    q: "What is the purpose of `git push origin`?",
+    options: [
+      "To download changes from the remote repository",
+      "To create a new local branch",
+      "To upload your local commits to a remote repository",
+      "To delete a remote repository"
+    ],
+    answer: 2, // 'To upload your local commits to a remote repository, typically on platforms like GitHub, GitLab or Bitbucket.'
+    time: 25
+  },
+  {
+    q: "How can you view a file's specific change history on GitHub (web)?",
+    options: [
+      "Click 'Branches' and select the file",
+      "Open the file and click 'History'",
+      "Use the 'git log' command directly on the GitHub website",
+      "It's not possible to view file history on GitHub's website"
+    ],
+    answer: 1, // 'Open the file → click ""History"".'
+    time: 25
+  },
+  {
+    q: "What happens immediately after running `git init` inside a folder?",
+    options: [
+      "All files are automatically staged and committed",
+      "A hidden `.git` folder is created, making it a local repository",
+      "The folder is connected to a remote GitHub repository",
+      "The project is published online"
+    ],
+    answer: 1, // 'When you run git init inside the folder bit, Git creates a hidden folder called .git inside the bit folder.'
+    time: 25
+  },
+  {
+    q: "After committing `name.txt`, where is the file located?",
+    options: [
+      "Only in the working directory",
+      "Only in the `.git` repository",
+      "Both in the working directory and saved in Git’s history in `.git`",
+      "It's deleted from the working directory"
+    ],
+    answer: 2, // 'Both in your working directory (as a regular file), And saved in Git’s history (in .git).'
+    time: 25
+  },
+  {
+    q: "What is the typical name given to a local Git repository when not connected to a remote?",
+    options: [
+      "It defaults to 'main'",
+      "It takes the name of the folder it's in",
+      "Local Git repositories do not have a name by default",
+      "It's named 'origin'"
+    ],
+    answer: 2, // 'Technically, local Git repositories do not have a name by default.'
+    time: 25
+  },
+  {
+    q: "Which PowerShell command lists hidden files and folders?",
+    options: [
+      "`dir /a:h`",
+      "`ls -a`",
+      "`Get-ChildItem -Attributes Hidden`",
+      "`show-hidden-files`"
+    ],
+    answer: 2, // 'Get-ChildItem -Attributes Hidden'
+    time: 20
+  },
+  {
+    q: "Which command shows all tracked files in the Git repository?",
+    options: [
+      "`git status`",
+      "`git show-tracked`",
+      "`git ls-files`",
+      "`git log`"
+    ],
+    answer: 2, // 'git ls-files'
+    time: 20
+  },
+  {
+    q: "What does the message 'no changes added to commit' imply?",
+    options: [
+      "There are no files in the directory",
+      "Changes have been made but not yet staged (`git add`)",
+      "The repository is already up to date",
+      "You have merge conflicts"
+    ],
+    answer: 1, // 'Git has detected changes, but you haven’t told Git to track them yet by staging them.'
+    time: 25
+  },
+  {
+    q: "Which command is used to see what files are modified or untracked in your Git working directory?",
+    options: [
+      "`git log`",
+      "`git show`",
+      "`git status`",
+      "`git diff`"
+    ],
+    answer: 2, // 'git status'
+    time: 20
+  },
+  {
+    q: "How can you list only untracked files in Git?",
+    options: [
+      "`git ls-files -m`",
+      "`git log --untracked`",
+      "`git ls-files --others --exclude-standard`",
+      "`git status --untracked-only`"
+    ],
+    answer: 2, // 'git ls-files --others --exclude-standard'
+    time: 25
+  },
+  {
+    q: "Which command lists files that have been staged, ready to be committed?",
+    options: [
+      "`git status -s`",
+      "`git ls-files -d`",
+      "`git diff --cached --name-only`",
+      "`git show --staged`"
+    ],
+    answer: 2, // 'git diff --cached --name-only'
+    time: 25
+  },
+  {
+    q: "To discard all local edits to a tracked file and revert it to the last committed version, which command is recommended in Git 2.23+?",
+    options: [
+      "`git remove filename.txt`",
+      "`git delete filename.txt`",
+      "`git restore filename.txt`",
+      "`git revert filename.txt`"
+    ],
+    answer: 2, // 'git restore filename.txt'
+    time: 25
+  },
+  {
+    q: "What happens when you run `git push -u origin main` after adding and committing a new file?",
+    options: [
+      "The file is deleted from the local repository",
+      "Your committed changes are uploaded to the `main` branch on GitHub",
+      "A new local branch named 'main' is created",
+      "The remote repository is deleted"
+    ],
+    answer: 1, // 'Your committed changes are uploaded to the `master` branch on GitHub' (adjusted for `main` branch context)
+    time: 25
+  },
+  {
+    q: "What does the Git error 'Updates were rejected because the remote contains work that you do not have locally' mean?",
+    options: [
+      "Your local repository is corrupted",
+      "The remote branch is completely empty",
+      "The remote branch has new commits not in your local branch, preventing a direct push",
+      "You do not have permission to push to the remote"
+    ],
+    answer: 2, // 'The remote `main` branch on GitHub already has some commits that your local `main` branch doesn't have.'
+    time: 30
+  },
+  {
+    q: "What are Mainframes primarily used for by large organizations?",
+    options: [
+      "Small personal computing tasks",
+      "Graphic design and multimedia creation",
+      "Critical applications requiring high volumes of data processing, reliability, and security",
+      "Web hosting for small businesses"
+    ],
+    answer: 2, // 'Mainframes are powerful, high-performance computers primarily used by large organizations for critical applications that require high volumes of data processing, reliability, and security.'
+    time: 30
+  },
+  {
+    q: "Which of the following describes `git remote add origin`?",
+    options: [
+      "Downloads a full copy of a remote repository",
+      "Links a local Git repository to a remote GitHub repository",
+      "Removes a remote repository connection",
+      "Pushes changes to the remote repository"
+    ],
+    answer: 1, // 'It links your local Git repository to a remote GitHub repository, so you can push and pull code.'
+    time: 25
+  },
+  {
+    q: "What is the key difference between `git clone` and `git remote add origin`?",
+    options: [
+      "`git clone` is for pulling changes, `git remote add origin` is for pushing",
+      "`git clone` creates a new local repo from a remote, while `git remote add origin` links an existing local repo to a remote",
+      "`git clone` is for local repositories only, `git remote add origin` is for remote only",
+      "They are interchangeable commands with the same function"
+    ],
+    answer: 1, // '`git clone` copies existing repo to your local system | `git remote add origin` links local repo to a remote (GitHub)'
+    time: 30
+  },
+  {
+    q: "What happens when you run `git remote add origin <URL>`?",
+    options: [
+      "Your GitHub repository is copied into your local project",
+      "Your local Git repository is linked to the GitHub repository at the given URL, but no files are copied yet",
+      "All local files are immediately pushed to GitHub",
+      "It deletes the existing remote connection"
+    ],
+    answer: 1, // 'It links your local Git repository to the GitHub repository at the given URL. No files are copied or downloaded.'
+    time: 25
+  },
+  {
+    q: "If `git push -u origin main` gives an error because the branch doesn't exist locally, what is a common fix?",
+    options: [
+      "Delete the remote repository and try again",
+      "Run `git pull origin main` directly",
+      "Ensure you have made a commit and the local branch exists (e.g., using `git branch -M main`)",
+      "Change your internet connection"
+    ],
+    answer: 2, // 'You probably: Ran `git init`, Added a remote (`git remote add origin ...`), But never created or committed to a branch named `main`'
+    time: 30
+  },
+  {
+    q: "What is the difference between `git push origin master` and `git push origin main`?",
+    options: [
+      "They are the same command for different Git versions",
+      "One pushes to a local branch, the other to a remote branch",
+      "They refer to different default branch names: `master` (older) vs. `main` (newer GitHub default)",
+      "Only one of them is a valid Git command"
+    ],
+    answer: 2, // 'They refer to different default branch names: `master` (older) vs. `main` (newer GitHub default)'
+    time: 25
+  },
+  {
+    q: "Where does branching and merging in Git primarily happen?",
+    options: [
+      "Only on the remote server (e.g., GitHub)",
+      "Primarily in your local repository",
+      "In a separate cloud service for Git operations",
+      "Directly in your file system without Git tracking"
+    ],
+    answer: 1, // 'Branching and merging in Git happens primarily in your local repository'
+    time: 25
+  }
+];
 
     let current = 0;
     let userAnswers = [];
