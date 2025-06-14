@@ -78,9 +78,11 @@
 
   <script>
     const questions = [
-        // Your SQL questions would go here (from your index.html)
-        // OR your Git questions (from index1.html, assuming you've renamed it to index.html or access it directly)
-        // For demonstration, I'll use the SQL questions from your original code:
+        // === IMPORTANT: PASTE YOUR QUESTIONS HERE ===
+        // Make sure this array contains multiple question objects.
+        // If it's empty or has only one question, it will immediately go to "Submit Exam".
+
+        // Example SQL questions (replace with your actual questions):
         {
             q: "Which SQL statement is used to extract data from a database?",
             options: ["GET", "OPEN", "SELECT", "EXTRACT"],
@@ -115,24 +117,22 @@
             options: ["NICKNAME", "RENAME", "ALIAS", "TEMP"],
             answer: 2,
             time: 25
+        },
+        // Example Git question (if you're using the Git quiz content):
+        {
+          q: "What is Git?",
+          options: [
+            "A document editing software",
+            "A distributed version control system",
+            "A project management tool",
+            "An operating system"
+          ],
+          answer: 1,
+          time: 25
         }
-        // ... add more questions here using the format I provided previously
-        // Example for Git quiz:
-        // {
-        //   q: "What is Git?",
-        //   options: [
-        //     "A document editing software",
-        //     "A distributed version control system",
-        //     "A project management tool",
-        //     "An operating system"
-        //   ],
-        //   answer: 1,
-        //   time: 25
-        // }
     ];
 
     let currentQuestionIndex = 0;
-    // Store user answers with a fixed size array, allowing for going back if needed (though not implemented here)
     let userAnswers = new Array(questions.length).fill(null);
     let timer;
     let secondsLeft;
@@ -141,6 +141,7 @@
     function calculateCorrectAnswers() {
         let count = 0;
         for (let i = 0; i < questions.length; i++) {
+            // Only count if an answer was actually given and it's correct
             if (userAnswers[i] !== null && userAnswers[i] === questions[i].answer) {
                 count++;
             }
@@ -152,8 +153,9 @@
         clearInterval(timer); // Clear any existing timer
         document.getElementById("result").innerHTML = ""; // Clear results area
 
+        // If trying to load a question beyond the array, submit the quiz
         if (index >= questions.length) {
-            submitQuiz(); // All questions answered, automatically submit
+            submitQuiz();
             return;
         }
 
@@ -188,12 +190,18 @@
 
         // Show/hide Next button
         if (currentQuestionIndex === questions.length - 1) {
-            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "none"; // Hide 'Save & Next' on last question
         } else {
-            document.getElementById("nextBtn").style.display = "inline-block";
+            document.getElementById("nextBtn").style.display = "inline-block"; // Show 'Save & Next' otherwise
         }
         document.getElementById("submitBtn").style.display = "inline-block"; // Always show submit
         document.getElementById("quizControls").style.display = "block"; // Ensure controls are visible
+
+        console.log(`Loaded question ${currentQuestionIndex + 1}. Time left: ${secondsLeft}s`); // Debugging log
+    }
+
+    function saveAndNext() {
+        saveAnswerAndMove(false); // false indicates not time-up
     }
 
     function saveAnswerAndMove(isTimeUp = false) {
@@ -203,12 +211,12 @@
         // Save the answer for the current question index
         if (selected) {
             userAnswers[currentQuestionIndex] = parseInt(selected.value);
-        } else if (isTimeUp) {
-            userAnswers[currentQuestionIndex] = null; // Mark as unanswered due to timeout
         } else {
-            // If user clicks "Save & Next" without selecting, treat as unanswered
+            // If user clicks "Save & Next" without selecting or time's up, mark as unanswered
             userAnswers[currentQuestionIndex] = null;
         }
+
+        console.log(`Saved answer for Q${currentQuestionIndex + 1}: ${userAnswers[currentQuestionIndex]}`); // Debugging log
 
         // Move to the next question or submit
         if (currentQuestionIndex < questions.length - 1) {
@@ -224,12 +232,14 @@
         clearInterval(timer); // Stop any active timer
         // Ensure the answer for the current question is saved before final submission
         const selected = document.querySelector("input[name='option']:checked");
-        if (selected && currentQuestionIndex < questions.length) { // Only save if a question is currently displayed
+        if (selected && currentQuestionIndex < questions.length) {
              userAnswers[currentQuestionIndex] = parseInt(selected.value);
         } else if (currentQuestionIndex < questions.length && userAnswers[currentQuestionIndex] === null) {
-            userAnswers[currentQuestionIndex] = null; // Ensure last question is marked as unanswered if no choice
+            // If the last question was displayed but no answer was chosen, explicitly mark null
+            userAnswers[currentQuestionIndex] = null;
         }
 
+        console.log("Submitting quiz. Final answers:", userAnswers); // Debugging log
         showResult();
     }
 
