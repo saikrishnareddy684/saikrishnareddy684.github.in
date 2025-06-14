@@ -10,7 +10,7 @@
       background: #f4f4f4;
       padding: 20px;
       color: #333;
-    }  
+    }
     .container {
       max-width: 700px;
       margin: auto;
@@ -47,143 +47,222 @@
       background: #e9ffe9;
       padding: 15px;
       border-radius: 10px;
+      border: 1px solid #c3e6cb;
+    }
+    #progress {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    /* Style for buttons on result screen */
+    #restartBtn {
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #28a745; /* Green */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div id="quiz"></div>
-    <button id="nextBtn" onclick="saveAndNext()">Save & Next</button>
-    <button id="submitBtn" onclick="submitQuiz()">Submit Exam</button>
+    <div id="quizControls">
+        <button id="nextBtn" onclick="saveAndNext()">Save & Next</button>
+        <button id="submitBtn" onclick="submitQuiz()">Submit Exam</button>
+    </div>
     <div id="result"></div>
   </div>
 
   <script>
     const questions = [
-      {
-        q: "Which SQL statement is used to extract data from a database?",
-        options: ["GET", "OPEN", "SELECT", "EXTRACT"],
-        answer: 2,
-        time: 20
-      },
-      {
-        q: "Which function is used to count the number of rows in SQL?",
-        options: ["COUNT()", "SUM()", "NUMBER()", "TOTAL()"],
-        answer: 0,
-        time: 25
-      },
-      {
-        q: "What does the SQL WHERE clause do?",
-        options: [
-          "Limits the rows returned",
-          "Sorts data",
-          "Joins tables",
-          "Creates a new table"
-        ],
-        answer: 0,
-        time: 30
-      },
-      {
-        q: "Which SQL keyword is used to change data in a table?",
-        options: ["MODIFY", "UPDATE", "CHANGE", "SET"],
-        answer: 1,
-        time: 20
-      },
-      {
-        q: "Which of these is used to give a table or column a temporary name?",
-        options: ["NICKNAME", "RENAME", "ALIAS", "TEMP"],
-        answer: 2,
-        time: 25
-      }
+        // Your SQL questions would go here (from your index.html)
+        // OR your Git questions (from index1.html, assuming you've renamed it to index.html or access it directly)
+        // For demonstration, I'll use the SQL questions from your original code:
+        {
+            q: "Which SQL statement is used to extract data from a database?",
+            options: ["GET", "OPEN", "SELECT", "EXTRACT"],
+            answer: 2,
+            time: 20
+        },
+        {
+            q: "Which function is used to count the number of rows in SQL?",
+            options: ["COUNT()", "SUM()", "NUMBER()", "TOTAL()"],
+            answer: 0,
+            time: 25
+        },
+        {
+            q: "What does the SQL WHERE clause do?",
+            options: [
+                "Limits the rows returned",
+                "Sorts data",
+                "Joins tables",
+                "Creates a new table"
+            ],
+            answer: 0,
+            time: 30
+        },
+        {
+            q: "Which SQL keyword is used to change data in a table?",
+            options: ["MODIFY", "UPDATE", "CHANGE", "SET"],
+            answer: 1,
+            time: 20
+        },
+        {
+            q: "Which of these is used to give a table or column a temporary name?",
+            options: ["NICKNAME", "RENAME", "ALIAS", "TEMP"],
+            answer: 2,
+            time: 25
+        }
+        // ... add more questions here using the format I provided previously
+        // Example for Git quiz:
+        // {
+        //   q: "What is Git?",
+        //   options: [
+        //     "A document editing software",
+        //     "A distributed version control system",
+        //     "A project management tool",
+        //     "An operating system"
+        //   ],
+        //   answer: 1,
+        //   time: 25
+        // }
     ];
 
-    let current = 0;
-    let userAnswers = [];
+    let currentQuestionIndex = 0;
+    // Store user answers with a fixed size array, allowing for going back if needed (though not implemented here)
+    let userAnswers = new Array(questions.length).fill(null);
     let timer;
     let secondsLeft;
+    let correctAnswersCount = 0;
+
+    function calculateCorrectAnswers() {
+        let count = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === questions[i].answer) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     function loadQuestion(index) {
-      clearInterval(timer);
-      const q = questions[index];
-      secondsLeft = q.time;
+        clearInterval(timer); // Clear any existing timer
+        document.getElementById("result").innerHTML = ""; // Clear results area
 
-      document.getElementById("quiz").innerHTML = `
-        <div class="timer">Time Left: <span id="timer">${secondsLeft}</span>s</div>
-        <div class="question">Q${index + 1}. ${q.q}</div>
-        <div class="options">
-          ${q.options.map((opt, i) => `
-            <label><input type="radio" name="option" value="${i}"> ${opt}</label>
-          `).join('')}
-        </div>
-      `;
-
-      timer = setInterval(() => {
-        secondsLeft--;
-        document.getElementById("timer").textContent = secondsLeft;
-        if (secondsLeft <= 0) {
-          saveAnswerAndMove();
+        if (index >= questions.length) {
+            submitQuiz(); // All questions answered, automatically submit
+            return;
         }
-      }, 1000);
+
+        const q = questions[index];
+        secondsLeft = q.time;
+
+        // Calculate and display progress before loading the question
+        correctAnswersCount = calculateCorrectAnswers();
+        const progressHTML = `<div id="progress">Question ${index + 1} of ${questions.length} | Correct so far: ${correctAnswersCount}</div>`;
+
+        document.getElementById("quiz").innerHTML = `
+            ${progressHTML}
+            <div class="timer">Time Left: <span id="timer">${secondsLeft}</span>s</div>
+            <div class="question">Q${index + 1}. ${q.q}</div>
+            <div class="options">
+                ${q.options.map((opt, i) => `
+                    <label>
+                        <input type="radio" name="option" value="${i}" ${userAnswers[index] === i ? 'checked' : ''}> ${opt}
+                    </label>
+                `).join('')}
+            </div>
+        `;
+
+        // Start the timer for the current question
+        timer = setInterval(() => {
+            secondsLeft--;
+            document.getElementById("timer").textContent = secondsLeft;
+            if (secondsLeft <= 0) {
+                saveAnswerAndMove(true); // true indicates time's up
+            }
+        }, 1000);
+
+        // Show/hide Next button
+        if (currentQuestionIndex === questions.length - 1) {
+            document.getElementById("nextBtn").style.display = "none";
+        } else {
+            document.getElementById("nextBtn").style.display = "inline-block";
+        }
+        document.getElementById("submitBtn").style.display = "inline-block"; // Always show submit
+        document.getElementById("quizControls").style.display = "block"; // Ensure controls are visible
     }
 
-    function saveAndNext() {
-      saveAnswerAndMove();
-    }
+    function saveAnswerAndMove(isTimeUp = false) {
+        clearInterval(timer); // Stop timer for current question
 
-    function saveAnswerAndMove() {
-      clearInterval(timer);
-      const selected = document.querySelector("input[name='option']:checked");
-      if (selected) {
-        userAnswers.push(parseInt(selected.value));
-      } else {
-        userAnswers.push(null);
-      }
-      if (current < questions.length - 1) {
-        current++;
-        loadQuestion(current);
-      } else {
-        submitQuiz();
-      }
+        const selected = document.querySelector("input[name='option']:checked");
+        // Save the answer for the current question index
+        if (selected) {
+            userAnswers[currentQuestionIndex] = parseInt(selected.value);
+        } else if (isTimeUp) {
+            userAnswers[currentQuestionIndex] = null; // Mark as unanswered due to timeout
+        } else {
+            // If user clicks "Save & Next" without selecting, treat as unanswered
+            userAnswers[currentQuestionIndex] = null;
+        }
+
+        // Move to the next question or submit
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        } else {
+            // Last question, so submit the quiz
+            submitQuiz();
+        }
     }
 
     function submitQuiz() {
-      clearInterval(timer);
-      if (userAnswers.length < questions.length) {
+        clearInterval(timer); // Stop any active timer
+        // Ensure the answer for the current question is saved before final submission
         const selected = document.querySelector("input[name='option']:checked");
-        if (selected) {
-          userAnswers.push(parseInt(selected.value));
-        } else {
-          userAnswers.push(null);
+        if (selected && currentQuestionIndex < questions.length) { // Only save if a question is currently displayed
+             userAnswers[currentQuestionIndex] = parseInt(selected.value);
+        } else if (currentQuestionIndex < questions.length && userAnswers[currentQuestionIndex] === null) {
+            userAnswers[currentQuestionIndex] = null; // Ensure last question is marked as unanswered if no choice
         }
-      }
-      showResult();
+
+        showResult();
     }
 
     function showResult() {
-      let score = 0;
-      let resultHTML = "<h3>Your Results:</h3><ul>";
+        let finalScore = calculateCorrectAnswers();
+        let resultHTML = "<h3>Quiz Completed!</h3>";
+        resultHTML += `<h4>Your Final Score: ${finalScore} / ${questions.length}</h4>`;
+        resultHTML += "<h3>Detailed Review:</h3><ul>";
 
-      questions.forEach((q, i) => {
-        const userAns = userAnswers[i];
-        const correct = q.answer;
-        const correctText = q.options[correct];
-        const userText = userAns !== null ? q.options[userAns] : "(No Answer)";
+        questions.forEach((q, i) => {
+            const userAnswer = userAnswers[i];
+            const correctOptionIndex = q.answer;
+            const correctText = q.options[correctOptionIndex];
+            const userText = userAnswer !== null ? q.options[userAnswer] : "(Not Answered)";
+            const isCorrect = (userAnswer === correctOptionIndex);
 
-        if (userAns === correct) score++;
+            resultHTML += `<li>
+                <strong>Q${i + 1}:</strong> ${q.q}<br>
+                Your Answer: <span style="color: ${isCorrect ? 'green' : 'red'};">${userText}</span><br>
+                Correct Answer: <span style="color: green;">${correctText}</span>
+            </li><br>`;
+        });
 
-        resultHTML += `<li><strong>Q${i + 1}:</strong> ${q.q}<br>
-          Your Answer: ${userText}<br>
-          Correct Answer: ${correctText}</li><br>`;
-      });
+        resultHTML += `</ul>`;
+        resultHTML += `<button id="restartBtn" onclick="location.reload()">Restart Quiz</button>`; // Added restart button
 
-      resultHTML += `</ul><h4>Score: ${score} / ${questions.length}</h4>`;
-      document.getElementById("quiz").style.display = "none";
-      document.getElementById("nextBtn").style.display = "none";
-      document.getElementById("submitBtn").style.display = "none";
-      document.getElementById("result").innerHTML = resultHTML;
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("quizControls").style.display = "none"; // Hide controls
+        document.getElementById("result").innerHTML = resultHTML;
     }
 
-    loadQuestion(current);
+    // Initial load
+    loadQuestion(currentQuestionIndex);
   </script>
 </body>
 </html>
