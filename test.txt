@@ -1,6 +1,6 @@
 repository: a repository is the core of the git its a directory it primarily stores all files as well as entire history of changes to those files
 working directory: this is the directory on your computer where you have the files of your project. its where you make the edits.
-  this is a temp file
+  this is a temp file but very important
 staging area(index): this is an intermediate area where you prepare the changes you've made in your working directory for the next commit. you selectively add(stage) the files you want to include in your commit. this of it as a draft.
 
 commit: a commit is a snapshot of your project at a specific point in time. it records the changes you've staged, along with a commit message describing those changes. each commit has a unique identifier. commits form a chronological history of your project.
