@@ -1,1 +1,31 @@
-this is test file 
+repository: a repository is the core of the git its a directory it primarily stores all files as well as entire history of changes to those files
+working directory: this is the directory on your computer where you have the files of your project. its where you make the edits.
+
+staging area(index): this is an intermediate area where you prepare the changes you've made in your working directory for the next commit. you selectively add(stage) the files you want to include in your commit. this of it as a draft.
+
+commit: a commit is a snapshot of your project at a specific point in time. it records the changes you've staged, along with a commit message describing those changes. each commit has a unique identifier. commits form a chronological history of your project.
+
+branch is a independent line of development. it allows you to work on new features or bug fixes without affecting the main codebase. you can create, switch between, and merge branches.
+
+merge: this process of combining changes from one branch to another. git attempts to automatically merge changes, but conflicts can occur if the same lines of code were modified in both branches.
+
+remote: a remote is a pointer to another repository, usually hosted on a server. this allows you to collaborate with outers, push your local changes to the remote repostiry, and putll changes from the remote repository to your local machine.
+
+git reset head index.html
+clone: creating a local copy of a remote 
+
+push: sending your local commits to a remote repository.
+pull
+fetch: Downloading commits and branches from a remote repository 
+
+git clone: when your setting up a project copies the whole repo to your local system
+git pull: when your updating an existing clone brings in changes form the remote to your local
+
+when you are settin up a project copies the whole repo to your local system
+git pull: when your updating an exisiting clone brings in changes from the remote to youjr
+
+git hub
+
+
+git remote push origin <url>
+git push origin main <branch> 
