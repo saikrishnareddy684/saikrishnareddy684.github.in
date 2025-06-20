@@ -1,6 +1,6 @@
 repository: a repository is the core of the git its a directory it primarily stores all files as well as entire history of changes to those files
 working directory: this is the directory on your computer where you have the files of your project. its where you make the edits.
-
+ sd
   this is a temp file but very important and must read
 
   this is a temp file also not important
