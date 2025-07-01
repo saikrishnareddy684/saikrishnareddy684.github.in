@@ -1,1 +1,56 @@
-this is a test file
+ 
+Lets say in CRC portfolio view grouping is happening and all the complex calculations are happening here in this view, later this view is to be processed to ssas cubes. Is tehre any advantage if grouping happen in sql view level. Will it impact the processing time to ssas cube as the grouping is there in vew.
+
+Also tell me if the grouping is not happen in view and processed to cubes and later when any measure are calculated column is there in cube then would it cause any impact in cube.
+
+
+
+
+Lets break this down into two scenarios -grouping in the sql view vs doing it in the ssas cube- and analyse how each impacts performance and design.
+
+ Scenario 1: Grouping Happens in the sql view (before SSAS)
+
+Advantages:
+1) reduced data volumn:
+Since data is already grouped and aggregated, you're pusing less data into the cube. This reduces:
+Data transfer volume.
+Storage usage in the cube.
+Cube processing time (especially for large fact tables)
+
+2) Pre-computed Logic:
+Complex calculations (if done correctly in sql ) are pre-processed, so SSAS doesn't have to compute them repeatedly for each user query or process.
+
+Disadvantages:
+1) Less Flexibility:
+Once grouped, the granularity is lost. you can't slice/dice below the grouping level inside SSAS unless you bring more detailed data separately.
+2) Harder Maintenance:
+When complex logic is in SQL views, debugging or auditing calculations becomes harder, especially for Power bi/excel users who can't see sql easily
+
+3) View Performance impact:
+If the grouping and derivations are complex and not well-indexed or filtered, the sql view itself could become slow, and this will directly slow down ssas cube processing.
+
+
+Scenario 2: Grouping happens in the SSAS cube (Raw data in view)
+Advantages:
+1) More Flexibility in cube:
+Your retain row-level data, so you can 
+- create multiple types of aggregations.
+- Add calculated measures and KPI later without changing the source.
+
+2) SSAS aggregation Design works better:
+SSAS can intelligently pre-aggregate combinations it detects in user queries (especially in MOLAP)
+
+3) Easier Debugging and maintenance:
+You can trace calculations within the cube using calculated members or MDX/DAX without going back to sql.
+
+Disadvantages:
+1) Larger cube size and slower processing:
+More detailed data means:
+- bigger processing times.sfds
+
+- more memory/cpu usage.
+- Longer deployment duration.
+
+2) Redundant calculation load on SSAS:
+ if sql could have efficiently done it, letting SSAS repeat these for every query ( esp. if no cache hit) is inefficient.
+
